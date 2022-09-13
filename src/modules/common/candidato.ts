@@ -1,0 +1,28 @@
+export type CandidatoFromDivulgacand = {
+  id: number
+  nomeUrna: string
+  nomeCompleto: string
+  numero: number
+}
+
+export type CandidatosFromDivulgacand = {
+  data: {
+    candidatos: CandidatoFromDivulgacand[]
+  }
+}
+
+export abstract class Candidato {
+  id: number
+  nomeUrna: string
+  nomeCompleto: string
+  numeroPartido: number
+
+  constructor(candidato: CandidatoFromDivulgacand) {
+    this.id = candidato.id
+    this.nomeUrna = candidato.nomeUrna
+    this.nomeCompleto = candidato.nomeCompleto
+    this.numeroPartido = candidato.numero
+
+    Object.freeze(this)
+  }
+}
