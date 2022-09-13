@@ -1,5 +1,6 @@
-import express, { Router } from 'express'
 import compression from 'compression'
+import express, { Router } from 'express'
+import { endpointNotFound } from './factories/middlewares/endpoint-not-found'
 
 export class HttpRestEnvironment {
   constructor(
@@ -15,6 +16,7 @@ export class HttpRestEnvironment {
     this.handler.disable('x-powered-by')
     const URL = `/quem-eu-financio/${this.version}`
     this.handler.use(URL, this.getRouter())
+    this.handler.use('*', endpointNotFound())
     this.handler.listen(this.port, () => {
       console.log(`\n\n\n Listening at ${this.port} \n\n\n`)
     })
