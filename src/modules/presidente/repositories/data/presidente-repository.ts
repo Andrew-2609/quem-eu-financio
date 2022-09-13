@@ -1,16 +1,11 @@
-import {
-  CandidatoFromDivulgacand,
-  CandidatosFromDivulgacand
-} from '@/modules/common/candidato'
+import { CandidatosFromDivulgacand } from '@/modules/common/candidato'
 import { FundaoEleitoralFromDivulgacand } from '@/modules/common/fundao-eleitoral'
 
 export interface PresidenteRepository {
-  getAll(): Promise<CandidatosFromDivulgacand>
+  getAll: () => Promise<CandidatosFromDivulgacand>
 
-  getByNome(nomePresidente: string): Promise<CandidatoFromDivulgacand[]>
-
-  getFundaoByIdAndNumPartido(
+  getFundaoByIdAndNumPartido: (
     id: number,
     numPartido: number
-  ): Promise<FundaoEleitoralFromDivulgacand>
+  ) => Promise<FundaoEleitoralFromDivulgacand>
 }

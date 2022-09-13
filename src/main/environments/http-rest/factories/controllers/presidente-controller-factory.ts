@@ -14,7 +14,7 @@ const makeGetPresidenteByNomeController = (): RequestHandler => {
   const controller = new PresidenteController(new PresidenteRepositoryAxios())
   return async (request: Request, response: Response) => {
     const presidenciavel = await controller.getByNome(
-      request.params['nomePresidente']
+      request.params.nomePresidente
     )
     response.json(presidenciavel)
   }

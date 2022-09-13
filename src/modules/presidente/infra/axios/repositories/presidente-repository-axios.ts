@@ -1,7 +1,4 @@
-import {
-  CandidatoFromDivulgacand,
-  CandidatosFromDivulgacand
-} from '@/modules/common/candidato'
+import { CandidatosFromDivulgacand } from '@/modules/common/candidato'
 import { FundaoEleitoralFromDivulgacand } from '@/modules/common/fundao-eleitoral'
 import { PresidenteRepository } from '@/modules/presidente/repositories/data/presidente-repository'
 import axios, { AxiosRequestConfig } from 'axios'
@@ -27,17 +24,6 @@ export class PresidenteRepositoryAxios implements PresidenteRepository {
     const { data } = await axios.get(
       `https://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2040602022/2022/BR/1/${numPartido}/${numPartido}/${id}`,
       config
-    )
-
-    return data
-  }
-
-  async getByNome(nomePresidente: string): Promise<CandidatoFromDivulgacand[]> {
-    const { candidatos } = await this.getAll()
-    const regex = new RegExp(nomePresidente.toLowerCase(), 'gi')
-
-    const data = candidatos.filter((candidato) =>
-      candidato.nomeCompleto.toLowerCase().match(regex)
     )
 
     return data

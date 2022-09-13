@@ -1,3 +1,7 @@
+import {
+  getRedis,
+  setRedis
+} from '@/main/environments/common/infra/redis/redisConfig'
 import { CandidatoFromDivulgacand } from '@/modules/common/candidato'
 import { FundaoEleitoral } from '@/modules/common/fundao-eleitoral'
 import { Presidente } from '../entities/presidente-entity'
@@ -7,15 +11,30 @@ export class PresidenteController {
   constructor(private readonly presidenteRepository: PresidenteRepository) {}
 
   async getAll(): Promise<Presidente[]> {
-    const { candidatos } = await this.presidenteRepository.getAll()
-    const presidenciaveis = await this.adicionarFundosDosCandidatos(candidatos)
+    let presidenciaveis: Presidente[] = []
+    const presidenciaveisRedis = await getRedis('presidenciaveis')
+
+    if (!presidenciaveisRedis) {
+      const { candidatos } = await this.presidenteRepository.getAll()
+      presidenciaveis = await this.adicionarFundosDosCandidatos(candidatos)
+      setRedis('presidenciaveis', JSON.stringify(presidenciaveis)) // set cache if not setted
+    } else {
+      presidenciaveis = JSON.parse(presidenciaveisRedis) // get from cache
+    }
+
     return presidenciaveis
   }
 
   async getByNome(nomePresidente: string): Promise<Presidente[]> {
-    const candidatos = await this.presidenteRepository.getByNome(nomePresidente)
-    const presidenciaveis = await this.adicionarFundosDosCandidatos(candidatos)
-    return presidenciaveis
+    const presidenciaveis = await this.getAll()
+
+    const regex = new RegExp(nomePresidente.toLowerCase(), 'gi')
+
+    const presidenciaveisProcurados = presidenciaveis.filter((presidenciavel) =>
+      presidenciavel.nomeCompleto.toLowerCase().match(regex)
+    )
+
+    return presidenciaveisProcurados
   }
 
   async getFundaoByIdAndNumPartido(
@@ -30,8 +49,8 @@ export class PresidenteController {
 
   private async adicionarFundosDosCandidatos(
     candidatosFromDivulgacand: CandidatoFromDivulgacand[]
-  ) {
-    return Promise.all(
+  ): Promise<Presidente[]> {
+    return await Promise.all(
       candidatosFromDivulgacand.map(async (candidato): Promise<Presidente> => {
         const presidenciavel = new Presidente(candidato)
 
