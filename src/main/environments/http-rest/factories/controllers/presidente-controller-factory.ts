@@ -3,9 +3,9 @@ import { PresidenteRepositoryAxios } from '@/modules/presidente/infra/axios/repo
 import { Request, RequestHandler, Response } from 'express'
 
 const makeGetAllPresidentesController = (): RequestHandler => {
-  const contoller = new PresidenteController(new PresidenteRepositoryAxios())
+  const controller = new PresidenteController(new PresidenteRepositoryAxios())
   return async (_request: Request, response: Response) => {
-    const presidenciaveis = await contoller.getAll()
+    const presidenciaveis = await controller.getAll()
     response.json(presidenciaveis)
   }
 }

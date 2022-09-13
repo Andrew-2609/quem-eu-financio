@@ -1,3 +1,5 @@
+import { FundaoEleitoral } from './fundao-eleitoral'
+
 export type CandidatoFromDivulgacand = {
   id: number
   nomeUrna: string
@@ -6,9 +8,7 @@ export type CandidatoFromDivulgacand = {
 }
 
 export type CandidatosFromDivulgacand = {
-  data: {
-    candidatos: CandidatoFromDivulgacand[]
-  }
+  candidatos: CandidatoFromDivulgacand[]
 }
 
 export abstract class Candidato {
@@ -16,13 +16,12 @@ export abstract class Candidato {
   nomeUrna: string
   nomeCompleto: string
   numeroPartido: number
+  fundos: FundaoEleitoral
 
   constructor(candidato: CandidatoFromDivulgacand) {
     this.id = candidato.id
     this.nomeUrna = candidato.nomeUrna
     this.nomeCompleto = candidato.nomeCompleto
     this.numeroPartido = candidato.numero
-
-    Object.freeze(this)
   }
 }
