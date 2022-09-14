@@ -1,12 +1,9 @@
 import Redis from 'ioredis'
 import { promisify } from 'util'
 
-const redisClient = new Redis({
-  host: process.env.REDIS_HOST,
-  username: process.env.REDIS_USER,
-  port: Number(process.env.REDIS_PORT),
-  password: process.env.REDIS_PASSWORD
-})
+const redisClient = new Redis(
+  `redis://${process.env.REDIS_USER}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
+)
 
 function getRedis(value: string): any {
   const syncRedisGet = promisify(redisClient.get).bind(redisClient)
