@@ -1,6 +1,7 @@
 import compression from 'compression'
 import express, { Router } from 'express'
 import { endpointNotFound } from './factories/middlewares/endpoint-not-found'
+import { registerDeputadoEstadualRoutes } from './routes/deputado-estadual-routes'
 import { registerPresidenteRoutes } from './routes/presidente-routes'
 
 export class HttpRestEnvironment {
@@ -27,6 +28,7 @@ export class HttpRestEnvironment {
     const router = Router()
     router.get('/health', (_req, res) => res.send('ok'))
     registerPresidenteRoutes(router)
+    registerDeputadoEstadualRoutes(router)
     return router
   }
 }

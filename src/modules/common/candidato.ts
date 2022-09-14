@@ -19,11 +19,11 @@ export abstract class Candidato {
   fundos: FundaoEleitoral
   confiraEm: string
 
-  constructor(range: string, candidato: CandidatoFromDivulgacand) {
+  constructor(areaAtuacao: string, candidato: CandidatoFromDivulgacand) {
     this.id = candidato.id
     this.nomeUrna = candidato.nomeUrna
     this.nomeCompleto = candidato.nomeCompleto
     this.numeroPartido = candidato.numero
-    this.confiraEm = `https://divulgacandcontas.tse.jus.br/divulga/#/candidato/2022/2040602022/${range}/${this.id}`
+    this.confiraEm = `https://divulgacandcontas.tse.jus.br/divulga/#/candidato/2022/2040602022/${areaAtuacao}/${this.id}`
   }
 }

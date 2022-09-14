@@ -26,7 +26,7 @@ export class FundaoEleitoral {
     Object.freeze(this)
   }
 
-  private real(receita: number) {
+  private real(receita: number): string {
     return receita?.toLocaleString('pt-BR', realBrasileiro)
   }
 }
