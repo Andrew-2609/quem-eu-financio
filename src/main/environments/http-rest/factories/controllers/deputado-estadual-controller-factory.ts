@@ -2,17 +2,17 @@ import { DeputadoEstadualController } from '@/modules/deputado-estadual/controll
 import { DeputadoEstadualRepositoryAxios } from '@/modules/deputado-estadual/infra/axios/repositories/deputado-estadual-repository-axios'
 import { Request, RequestHandler, Response } from 'express'
 
-const makeGetAllDeputadosEstaduaisByStateController = (): RequestHandler => {
+const makeGetAllDeputadosEstaduaisByEstadoController = (): RequestHandler => {
   const controller = new DeputadoEstadualController(
     new DeputadoEstadualRepositoryAxios()
   )
 
   return async (request: Request, response: Response) => {
-    const deputadosEstaduais = await controller.getAllByState(
-      request.params.state.toUpperCase()
+    const deputadosEstaduais = await controller.getAllByEstado(
+      request.params.estado.toUpperCase()
     )
     response.json(deputadosEstaduais)
   }
 }
 
-export { makeGetAllDeputadosEstaduaisByStateController as getAllDeputadosEstaduaisByStateController }
+export { makeGetAllDeputadosEstaduaisByEstadoController as getAllDeputadosEstaduaisByEstadoController }

@@ -12,23 +12,23 @@ export class DeputadoEstadualController {
     private readonly deputadoEstadualRepository: DeputadoEstadualRepository
   ) {}
 
-  async getAllByState(state: string): Promise<DeputadoEstadual[]> {
+  async getAllByEstado(estado: string): Promise<DeputadoEstadual[]> {
     let deputadosEstaduaisByEstado: DeputadoEstadual[] = []
     const deputadosEstaduaisByEstadoRedis = await getRedis(
-      `deputados-estaduais-${state}`
+      `deputados-estaduais-${estado}`
     )
 
     if (!deputadosEstaduaisByEstadoRedis) {
       const { candidatos } =
-        await this.deputadoEstadualRepository.getAllByState(state)
+        await this.deputadoEstadualRepository.getAllByEstado(estado)
 
       deputadosEstaduaisByEstado = await this.adicionarFundosDosCandidatos(
-        state,
+        estado,
         candidatos
       )
 
       setRedis(
-        `deputados-estaduais-${state}`,
+        `deputados-estaduais-${estado}`,
         JSON.stringify(deputadosEstaduaisByEstado) // set cache if not setted
       )
     } else {
@@ -39,13 +39,13 @@ export class DeputadoEstadualController {
   }
 
   private async getFundaoByIdAndNumPartido(
-    state: string,
+    estado: string,
     id: number,
     numPartido: number
   ): Promise<FundaoEleitoral> {
     const fundaoFromDivulgaCand =
-      await this.deputadoEstadualRepository.getFundaoByStateAndIdAndNumPartido(
-        state,
+      await this.deputadoEstadualRepository.getFundaoByEstadoAndIdAndNumPartido(
+        estado,
         id,
         numPartido
       )
@@ -53,17 +53,17 @@ export class DeputadoEstadualController {
   }
 
   private async adicionarFundosDosCandidatos(
-    state: string,
+    estado: string,
     candidatosFromDivulgacand: CandidatoFromDivulgacand[]
   ): Promise<DeputadoEstadual[]> {
     return await Promise.all(
       candidatosFromDivulgacand.map(
         async (candidato): Promise<DeputadoEstadual> => {
-          const deputadoEstadual = new DeputadoEstadual(state, candidato)
+          const deputadoEstadual = new DeputadoEstadual(estado, candidato)
 
           // get the data from getFundaoByIdAndNumPartido and set to deputadoEstadual.fundos
           deputadoEstadual.fundos = await this.getFundaoByIdAndNumPartido(
-            state,
+            estado,
             deputadoEstadual.id,
             deputadoEstadual.numeroPartido
           )

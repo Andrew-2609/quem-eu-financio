@@ -10,17 +10,17 @@ const config: AxiosRequestConfig = {
 export class DeputadoEstadualRepositoryAxios
   implements DeputadoEstadualRepository
 {
-  async getAllByState(state: string): Promise<CandidatosFromDivulgacand> {
+  async getAllByEstado(estado: string): Promise<CandidatosFromDivulgacand> {
     const { data } = await axios.get(
-      `https://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/listar/2022/${state}/2040602022/7/candidatos`,
+      `https://divulgacandcontas.tse.jus.br/divulga/rest/v1/candidatura/listar/2022/${estado}/2040602022/7/candidatos`,
       config
     )
 
     return data
   }
 
-  async getFundaoByStateAndIdAndNumPartido(
-    state: string,
+  async getFundaoByEstadoAndIdAndNumPartido(
+    estado: string,
     id: number,
     numPartido: number
   ): Promise<FundaoEleitoralFromDivulgacand> {
@@ -28,7 +28,7 @@ export class DeputadoEstadualRepositoryAxios
     const numPartidoOriginal = Number(String(numPartido).slice(0, 2))
 
     const { data } = await axios.get(
-      `https://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2040602022/2022/${state}/7/${numPartidoOriginal}/${numPartido}/${id}`,
+      `https://divulgacandcontas.tse.jus.br/divulga/rest/v1/prestador/consulta/2040602022/2022/${estado}/7/${numPartidoOriginal}/${numPartido}/${id}`,
       config
     )
 
