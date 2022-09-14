@@ -2,7 +2,7 @@ import {
   getRedis,
   setRedis
 } from '@/main/environments/common/infra/redis/redisConfig'
-import { CandidatoFromDivulgacand } from '@/modules/common/candidato'
+import { Candidato, CandidatoFromDivulgacand } from '@/modules/common/candidato'
 import { FundaoEleitoral } from '@/modules/common/fundao-eleitoral'
 import { Presidente } from '../entities/presidente-entity'
 import { PresidenteRepository } from '../repositories/data/presidente-repository'
@@ -16,7 +16,9 @@ export class PresidenteController {
 
     if (!presidenciaveisRedis) {
       const { candidatos } = await this.presidenteRepository.getAll()
-      presidenciaveis = await this.adicionarFundosDosCandidatos(candidatos)
+      presidenciaveis = await this.adicionarFundosDosCandidatosERetornalos(
+        candidatos
+      )
       setRedis('presidenciaveis', JSON.stringify(presidenciaveis)) // set cache if not setted
     } else {
       presidenciaveis = JSON.parse(presidenciaveisRedis) // get from cache
@@ -27,14 +29,7 @@ export class PresidenteController {
 
   async getByNome(nomePresidente: string): Promise<Presidente[]> {
     const presidenciaveis = await this.getAll()
-
-    const regex = new RegExp(nomePresidente.toLowerCase(), 'gi')
-
-    const presidenciaveisProcurados = presidenciaveis.filter((presidenciavel) =>
-      presidenciavel.nomeCompleto.toLowerCase().match(regex)
-    )
-
-    return presidenciaveisProcurados
+    return Candidato.searchByNome(nomePresidente, presidenciaveis)
   }
 
   async getFundaoByIdAndNumPartido(
@@ -47,7 +42,7 @@ export class PresidenteController {
     return new FundaoEleitoral(fundaoFromDivulgaCand)
   }
 
-  private async adicionarFundosDosCandidatos(
+  private async adicionarFundosDosCandidatosERetornalos(
     candidatosFromDivulgacand: CandidatoFromDivulgacand[]
   ): Promise<Presidente[]> {
     return await Promise.all(

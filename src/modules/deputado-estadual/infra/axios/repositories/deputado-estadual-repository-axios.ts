@@ -2,9 +2,12 @@ import { CandidatosFromDivulgacand } from '@/modules/common/candidato'
 import { FundaoEleitoralFromDivulgacand } from '@/modules/common/fundao-eleitoral'
 import { DeputadoEstadualRepository } from '@/modules/deputado-estadual/repositories/deputado-estadual-repository'
 import axios, { AxiosRequestConfig } from 'axios'
+import https from 'https'
 
 const config: AxiosRequestConfig = {
-  headers: { 'User-Agent': 'Mozilla/5.0' }
+  headers: { 'User-Agent': 'Mozilla/5.0' },
+  timeout: 600000,
+  httpsAgent: new https.Agent({ keepAlive: true })
 }
 
 export class DeputadoEstadualRepositoryAxios

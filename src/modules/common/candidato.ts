@@ -26,4 +26,16 @@ export abstract class Candidato {
     this.numero = candidato.numero
     this.confiraEm = `https://divulgacandcontas.tse.jus.br/divulga/#/candidato/2022/2040602022/${areaAtuacao}/${this.id}`
   }
+
+  static searchByNome(nome: string, candidatos: Candidato[]): Candidato[] {
+    const regex = new RegExp(nome.toLowerCase(), 'gi')
+
+    const candidatosProcurados = candidatos.filter(
+      (candidato) =>
+        candidato.nomeCompleto.toLowerCase().match(regex) ||
+        candidato.nomeUrna.toLowerCase().match(regex)
+    )
+
+    return candidatosProcurados
+  }
 }

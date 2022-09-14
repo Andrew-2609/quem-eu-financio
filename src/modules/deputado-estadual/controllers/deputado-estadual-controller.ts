@@ -2,7 +2,7 @@ import {
   getRedis,
   setRedis
 } from '@/main/environments/common/infra/redis/redisConfig'
-import { CandidatoFromDivulgacand } from '@/modules/common/candidato'
+import { Candidato, CandidatoFromDivulgacand } from '@/modules/common/candidato'
 import { FundaoEleitoral } from '@/modules/common/fundao-eleitoral'
 import { DeputadoEstadual } from '../entities/deputado-estadual-entity'
 import { DeputadoEstadualRepository } from '../repositories/deputado-estadual-repository'
@@ -22,10 +22,8 @@ export class DeputadoEstadualController {
       const { candidatos } =
         await this.deputadoEstadualRepository.getAllByEstado(estado)
 
-      deputadosEstaduaisByEstado = await this.adicionarFundosDosCandidatos(
-        estado,
-        candidatos
-      )
+      deputadosEstaduaisByEstado =
+        await this.adicionarFundosDosCandidatosERetornalos(estado, candidatos)
 
       setRedis(
         `deputados-estaduais-${estado}`,
@@ -36,6 +34,14 @@ export class DeputadoEstadualController {
     }
 
     return deputadosEstaduaisByEstado
+  }
+
+  async getByEstadoAndNome(
+    estado: string,
+    nomeDeputadoEstadual: string
+  ): Promise<DeputadoEstadual[]> {
+    const deputadosEstaduais = await this.getAllByEstado(estado)
+    return Candidato.searchByNome(nomeDeputadoEstadual, deputadosEstaduais)
   }
 
   private async getFundaoByIdAndNumPartido(
@@ -52,7 +58,7 @@ export class DeputadoEstadualController {
     return new FundaoEleitoral(fundaoFromDivulgaCand)
   }
 
-  private async adicionarFundosDosCandidatos(
+  private async adicionarFundosDosCandidatosERetornalos(
     estado: string,
     candidatosFromDivulgacand: CandidatoFromDivulgacand[]
   ): Promise<DeputadoEstadual[]> {

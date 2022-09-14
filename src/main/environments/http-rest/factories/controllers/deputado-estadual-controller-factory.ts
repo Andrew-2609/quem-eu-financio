@@ -15,4 +15,20 @@ const makeGetAllDeputadosEstaduaisByEstadoController = (): RequestHandler => {
   }
 }
 
-export { makeGetAllDeputadosEstaduaisByEstadoController as getAllDeputadosEstaduaisByEstadoController }
+const makeGetDeputadoEstadualByNomeController = (): RequestHandler => {
+  const controller = new DeputadoEstadualController(
+    new DeputadoEstadualRepositoryAxios()
+  )
+  return async (request: Request, response: Response) => {
+    const deputadoEstadual = await controller.getByEstadoAndNome(
+      request.params.estado,
+      request.params.nomeDeputadoEstadual
+    )
+    response.json(deputadoEstadual)
+  }
+}
+
+export {
+  makeGetAllDeputadosEstaduaisByEstadoController as getAllDeputadosEstaduaisByEstadoController,
+  makeGetDeputadoEstadualByNomeController as getDeputadoEstadualByNomeController
+}
