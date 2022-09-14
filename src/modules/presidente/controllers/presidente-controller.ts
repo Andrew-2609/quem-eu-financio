@@ -57,7 +57,7 @@ export class PresidenteController {
         // get the data from getFundaoByIdAndNumPartido and set to presidenciavel.fundos
         presidenciavel.fundos = await this.getFundaoByIdAndNumPartido(
           presidenciavel.id,
-          presidenciavel.numeroPartido
+          presidenciavel.numero
         )
 
         return presidenciavel

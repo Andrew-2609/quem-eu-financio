@@ -65,7 +65,7 @@ export class DeputadoEstadualController {
           deputadoEstadual.fundos = await this.getFundaoByIdAndNumPartido(
             estado,
             deputadoEstadual.id,
-            deputadoEstadual.numeroPartido
+            deputadoEstadual.numero
           )
 
           return deputadoEstadual
