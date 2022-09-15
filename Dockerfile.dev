@@ -10,16 +10,4 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
-
-# Build Stage 2
-# Aqui a Docker Image final é gerada
-FROM node:18-alpine
-
-WORKDIR /app
-
-COPY --from=build /app/node_modules ./node_modules
-
-COPY --from=build /app/dist ./dist
-
-CMD npm run start
+CMD npm run start:dev
