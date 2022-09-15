@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rimraf ./dist && tsc",
     "start:dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only --ignore-watch node_modules src/main",
-    "start": "npm run build && node dist/index.js",
+    "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/main/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "husky install"
   },
