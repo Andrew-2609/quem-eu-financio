@@ -1,5 +1,3 @@
-import { FundaoEleitoral } from './fundao-eleitoral'
-
 export type CandidatoFromDivulgacand = {
   id: number
   nomeUrna: string
@@ -16,7 +14,6 @@ export abstract class Candidato {
   nomeUrna: string
   nomeCompleto: string
   numero: number
-  fundos: FundaoEleitoral
   confiraEm: string
 
   constructor(areaAtuacao: string, candidato: CandidatoFromDivulgacand) {
