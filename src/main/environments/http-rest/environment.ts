@@ -1,11 +1,13 @@
 import compression from 'compression'
 import express, { Router } from 'express'
 import { endpointNotFound } from './factories/middlewares/endpoint-not-found'
-import { registerDeputadoEstadualRoutes } from './routes/deputado-estadual-routes'
-import { registerDeputadoFederalRoutes } from './routes/deputado-federal-routes'
-import { registerGovernadorRoutes } from './routes/governador-routes'
-import { registerPresidenteRoutes } from './routes/presidente-routes'
-import { registerSenadorRoutes } from './routes/senador-routes'
+import {
+  registerDeputadoEstadualRoutes,
+  registerDeputadoFederalRoutes,
+  registerGovernadorRoutes,
+  registerPresidenteRoutes,
+  registerSenadorRoutes
+} from './routes'
 
 export class HttpRestEnvironment {
   constructor(

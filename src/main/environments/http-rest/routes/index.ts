@@ -1,0 +1,5 @@
+export * from './presidente-routes'
+export * from './governador-routes'
+export * from './senador-routes'
+export * from './deputado-federal-routes'
+export * from './deputado-estadual-routes'

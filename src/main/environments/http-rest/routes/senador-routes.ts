@@ -3,7 +3,7 @@ import {
   getAllSenadoresByEstadoController,
   getFundaoSenadorController,
   getSenadorByNomeController
-} from '../factories/controllers/senador-controller-factory'
+} from '../factories/controllers'
 
 export const registerSenadorRoutes = (router: Router): void => {
   router.get('/senadores/:estado', getAllSenadoresByEstadoController())

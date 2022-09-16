@@ -3,7 +3,7 @@ import {
   getAllDeputadosEstaduaisByEstadoController,
   getDeputadoEstadualByNomeController,
   getFundaoDeputadoEstadualController
-} from '../factories/controllers/deputado-estadual-controller-factory'
+} from '../factories/controllers'
 
 export const registerDeputadoEstadualRoutes = (router: Router): void => {
   router.get(

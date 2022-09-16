@@ -3,7 +3,7 @@ import {
   getAllPresidentes,
   getFundaoPresidenteController,
   getPresidenteByNome
-} from '../factories/controllers/presidente-controller-factory'
+} from '../factories/controllers'
 
 export const registerPresidenteRoutes = (router: Router): void => {
   router.get('/presidentes', getAllPresidentes())

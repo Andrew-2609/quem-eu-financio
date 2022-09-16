@@ -3,7 +3,7 @@ import {
   getAllGovernadoresByEstadoController,
   getFundaoGovernadorController,
   getGovernadorByNomeController
-} from '../factories/controllers/governador-controller-factory'
+} from '../factories/controllers'
 
 export const registerGovernadorRoutes = (router: Router): void => {
   router.get('/governadores/:estado', getAllGovernadoresByEstadoController())
