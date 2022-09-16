@@ -2,7 +2,7 @@ import {
   getRedis,
   setRedis
 } from '@/main/environments/common/infra/redis/redisConfig'
-import { Candidato, CandidatoFromDivulgacand } from '@/modules/common/candidato'
+import { Candidato } from '@/modules/common/candidato'
 import { FundaoEleitoral } from '@/modules/common/fundao-eleitoral'
 import { Presidente } from '../entities/presidente-entity'
 import { PresidenteRepository } from '../repositories/data/presidente-repository'
@@ -16,12 +16,10 @@ export class PresidenteController {
 
     if (!presidenciaveisRedis) {
       const { candidatos } = await this.presidenteRepository.getAll()
-      presidenciaveis = await this.adicionarFundosDosCandidatosERetornalos(
-        candidatos
-      )
-      setRedis('presidenciaveis', JSON.stringify(presidenciaveis)) // set cache if not setted
+      presidenciaveis = candidatos.map((candidato) => new Presidente(candidato))
+      setRedis('presidenciaveis', JSON.stringify(presidenciaveis)) // define cache se ainda não houver
     } else {
-      presidenciaveis = JSON.parse(presidenciaveisRedis) // get from cache
+      presidenciaveis = JSON.parse(presidenciaveisRedis) // pega do cache
     }
 
     return presidenciaveis
@@ -36,27 +34,23 @@ export class PresidenteController {
     id: number,
     numPartido: number
   ): Promise<FundaoEleitoral> {
-    const fundaoFromDivulgaCand =
-      await this.presidenteRepository.getFundaoByIdAndNumPartido(id, numPartido)
+    let fundaoEleitoral: FundaoEleitoral
+    const fundaoRedis = await getRedis(`fundao-${id}-${numPartido}`)
 
-    return new FundaoEleitoral(fundaoFromDivulgaCand)
-  }
-
-  private async adicionarFundosDosCandidatosERetornalos(
-    candidatosFromDivulgacand: CandidatoFromDivulgacand[]
-  ): Promise<Presidente[]> {
-    return await Promise.all(
-      candidatosFromDivulgacand.map(async (candidato): Promise<Presidente> => {
-        const presidenciavel = new Presidente(candidato)
-
-        // get the data from getFundaoByIdAndNumPartido and set to presidenciavel.fundos
-        presidenciavel.fundos = await this.getFundaoByIdAndNumPartido(
-          presidenciavel.id,
-          presidenciavel.numero
+    if (!fundaoRedis) {
+      const fundaoFromDivulgaCand =
+        await this.presidenteRepository.getFundaoByIdAndNumPartido(
+          id,
+          numPartido
         )
 
-        return presidenciavel
-      })
-    )
+      fundaoEleitoral = new FundaoEleitoral(fundaoFromDivulgaCand)
+
+      setRedis(`fundao-${id}-${numPartido}`, JSON.stringify(fundaoEleitoral)) // define cache se ainda não houver
+    } else {
+      fundaoEleitoral = JSON.parse(fundaoRedis) // pega do cache
+    }
+
+    return fundaoEleitoral
   }
 }

@@ -20,7 +20,19 @@ const makeGetPresidenteByNomeController = (): RequestHandler => {
   }
 }
 
+const makeGetFundaoPresidenteController = (): RequestHandler => {
+  const controller = new PresidenteController(new PresidenteRepositoryAxios())
+  return async (request: Request, response: Response) => {
+    const fundao = await controller.getFundaoByIdAndNumPartido(
+      Number(request.query.id),
+      Number(request.query.numPartido)
+    )
+    response.json(fundao)
+  }
+}
+
 export {
   makeGetAllPresidentesController as getAllPresidentes,
-  makeGetPresidenteByNomeController as getPresidenteByNome
+  makeGetPresidenteByNomeController as getPresidenteByNome,
+  makeGetFundaoPresidenteController as getFundaoPresidenteController
 }
