@@ -2,7 +2,7 @@ import {
   getRedis,
   setRedis
 } from '@/main/environments/common/infra/redis/redisConfig'
-import { Candidato, CandidatoFromDivulgacand } from '@/modules/common/candidato'
+import { Candidato } from '@/modules/common/candidato'
 import { FundaoEleitoral } from '@/modules/common/fundao-eleitoral'
 import { DeputadoEstadual } from '../entities/deputado-estadual-entity'
 import { DeputadoEstadualRepository } from '../repositories/deputado-estadual-repository'
@@ -22,8 +22,9 @@ export class DeputadoEstadualController {
       const { candidatos } =
         await this.deputadoEstadualRepository.getAllByEstado(estado)
 
-      deputadosEstaduaisByEstado =
-        await this.adicionarFundosDosCandidatosERetornalos(estado, candidatos)
+      deputadosEstaduaisByEstado = candidatos.map(
+        (candidato) => new DeputadoEstadual(estado, candidato)
+      )
 
       setRedis(
         `deputados-estaduais-${estado}`,
@@ -44,39 +45,32 @@ export class DeputadoEstadualController {
     return Candidato.searchByNome(nomeDeputadoEstadual, deputadosEstaduais)
   }
 
-  private async getFundaoByIdAndNumPartido(
+  async getFundaoByEstadoAndIdAndNumPartido(
     estado: string,
     id: number,
     numPartido: number
   ): Promise<FundaoEleitoral> {
-    const fundaoFromDivulgaCand =
-      await this.deputadoEstadualRepository.getFundaoByEstadoAndIdAndNumPartido(
-        estado,
-        id,
-        numPartido
-      )
-    return new FundaoEleitoral(fundaoFromDivulgaCand)
-  }
+    let fundaoEleitoral: FundaoEleitoral
+    const fundaoRedis = await getRedis(`fundao-${id}-${numPartido}-${estado}`)
 
-  private async adicionarFundosDosCandidatosERetornalos(
-    estado: string,
-    candidatosFromDivulgacand: CandidatoFromDivulgacand[]
-  ): Promise<DeputadoEstadual[]> {
-    return await Promise.all(
-      candidatosFromDivulgacand.map(
-        async (candidato): Promise<DeputadoEstadual> => {
-          const deputadoEstadual = new DeputadoEstadual(estado, candidato)
+    if (!fundaoRedis) {
+      const fundaoFromDivulgaCand =
+        await this.deputadoEstadualRepository.getFundaoByEstadoAndIdAndNumPartido(
+          estado,
+          id,
+          numPartido
+        )
 
-          // get the data from getFundaoByIdAndNumPartido and set to deputadoEstadual.fundos
-          deputadoEstadual.fundos = await this.getFundaoByIdAndNumPartido(
-            estado,
-            deputadoEstadual.id,
-            deputadoEstadual.numero
-          )
+      fundaoEleitoral = new FundaoEleitoral(fundaoFromDivulgaCand)
 
-          return deputadoEstadual
-        }
-      )
-    )
+      setRedis(
+        `fundao-${id}-${numPartido}-${estado}`,
+        JSON.stringify(fundaoEleitoral)
+      ) // define cache se ainda não houver
+    } else {
+      fundaoEleitoral = JSON.parse(fundaoRedis) // pega do cache
+    }
+
+    return fundaoEleitoral
   }
 }

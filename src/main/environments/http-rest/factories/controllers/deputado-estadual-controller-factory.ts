@@ -28,7 +28,22 @@ const makeGetDeputadoEstadualByNomeController = (): RequestHandler => {
   }
 }
 
+const makeGetFundaoDeputadoEstadualController = (): RequestHandler => {
+  const controller = new DeputadoEstadualController(
+    new DeputadoEstadualRepositoryAxios()
+  )
+  return async (request: Request, response: Response) => {
+    const fundao = await controller.getFundaoByEstadoAndIdAndNumPartido(
+      request.params.estado,
+      Number(request.query.id),
+      Number(request.query.numero)
+    )
+    response.json(fundao)
+  }
+}
+
 export {
   makeGetAllDeputadosEstaduaisByEstadoController as getAllDeputadosEstaduaisByEstadoController,
-  makeGetDeputadoEstadualByNomeController as getDeputadoEstadualByNomeController
+  makeGetDeputadoEstadualByNomeController as getDeputadoEstadualByNomeController,
+  makeGetFundaoDeputadoEstadualController as getFundaoDeputadoEstadualController
 }
