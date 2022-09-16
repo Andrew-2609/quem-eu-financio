@@ -5,7 +5,7 @@ import {
 import { Candidato } from '@/modules/common/candidato'
 import { FundaoEleitoral } from '@/modules/common/fundao-eleitoral'
 import { Presidente } from '../entities/presidente-entity'
-import { PresidenteRepository } from '../repositories/data/presidente-repository'
+import { PresidenteRepository } from '../repositories/presidente-repository'
 
 export class PresidenteController {
   constructor(private readonly presidenteRepository: PresidenteRepository) {}

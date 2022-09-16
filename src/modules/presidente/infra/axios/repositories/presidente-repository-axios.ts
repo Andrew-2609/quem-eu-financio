@@ -1,6 +1,6 @@
 import { CandidatosFromDivulgacand } from '@/modules/common/candidato'
 import { FundaoEleitoralFromDivulgacand } from '@/modules/common/fundao-eleitoral'
-import { PresidenteRepository } from '@/modules/presidente/repositories/data/presidente-repository'
+import { PresidenteRepository } from '@/modules/presidente/repositories/presidente-repository'
 import axios, { AxiosRequestConfig } from 'axios'
 
 const config: AxiosRequestConfig = {
