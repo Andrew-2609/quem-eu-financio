@@ -23,8 +23,5 @@ jobs:
         REMOTE_HOST: ${{secrets.HOST_DNS}}
         REMOTE_USER: ${{secrets.USERNAME}}
         TARGET: ${{secrets.TARGET_DIR}}
-        EXCLUDE: "/dist/, /node_modules/, **.env"
-
-    - name: Rebuild Application
-      run: docker-compose up --force-recreate --build -d
+        EXCLUDE: "/dist/, /node_modules/, **.env, rebuild_app.sh, watcher.sh"
   
