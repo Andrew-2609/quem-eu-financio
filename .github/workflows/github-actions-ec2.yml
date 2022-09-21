@@ -25,7 +25,4 @@ jobs:
         REMOTE_USER: ${{secrets.USERNAME}}
         TARGET: ${{secrets.TARGET_DIR}}
         EXCLUDE: "**.env"
-
-    - name: Start the application
-      run: npm run start
   
