@@ -26,6 +26,6 @@ jobs:
         TARGET: ${{secrets.TARGET_DIR}}
         EXCLUDE: "**.env"
 
-    - name: Restart the application
-      run: docker-compose down && docker-compose up
+    - name: Stop the application
+      run: docker-compose down
   
