@@ -27,6 +27,5 @@ jobs:
         EXCLUDE: "**.env"
 
     - name: Restart the application
-      run: docker-compose down
-      run: docker-compose up
+      run: docker-compose down && docker-compose up
   
