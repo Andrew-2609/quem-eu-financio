@@ -26,5 +26,5 @@ jobs:
         EXCLUDE: "/dist/, /node_modules/, **.env"
 
     - name: Rebuild Application
-      run: docker-compose --force-recreate --build -d
+      run: docker-compose up --force-recreate --build -d
   
