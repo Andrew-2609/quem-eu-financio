@@ -1,19 +1,29 @@
+# Imagem usada como base
 FROM node:18-alpine AS build
 
+# Define o usuário como 'node'
 USER node
 
+# Cria o diretório /home/node/app dentro do container
 RUN mkdir /home/node/app
 
+# Usa o diretório como base
 WORKDIR /home/node/app
 
+# Copia os arquivos package.json e package-lock.json do projeto para o diretório base
 COPY --chown=node:node package*.json .
 
+# Instala as dependências contidas no arquivo package.json
 RUN npm install --loglevel=error
 
+# Copia os conteúdos do projeto para o diretório base
 COPY --chown=node:node . .
 
+# Roda o comando 'npm run build'
 RUN npm run build
 
+# Expõe a porta 3000 no container
 EXPOSE 3000
 
+# Inicia a aplicação
 CMD npm run start
