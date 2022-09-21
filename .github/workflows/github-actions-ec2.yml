@@ -17,6 +17,9 @@ jobs:
     - name: Deploy to Server 1
       uses: easingthemes/ssh-deploy@main
 
+    - name: Rebuild Application
+      run: docker-compose --force-recreate --build -d
+
       env:
         SSH_PRIVATE_KEY: ${{secrets.EC2_SSH_KEY}}
         ARGS: "-rltgoDzvO --delete"
