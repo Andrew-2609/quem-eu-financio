@@ -19,7 +19,7 @@ RUN npm install --loglevel=error
 # Copia os conteúdos do projeto para o diretório base
 COPY --chown=node:node . .
 
-# Roda o comando 'npm run build'
+# Builda a aplicação
 RUN npm run build
 
 # Expõe a porta 3000 no container
