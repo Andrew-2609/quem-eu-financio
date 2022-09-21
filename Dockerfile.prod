@@ -1,25 +1,19 @@
-# Build Stage 1
-# Esse estágio prepara o ambiente para a Docker Image final
 FROM node:18-alpine AS build
 
-WORKDIR /app
+USER node
 
-COPY package*.json ./
+RUN mkdir /home/node/app
 
-RUN npm ci
+WORKDIR /home/node/app
 
-COPY . .
+COPY --chown=node:node package*.json .
+
+RUN npm install --loglevel=error
+
+COPY --chown=node:node . .
 
 RUN npm run build
 
-# Build Stage 2
-# Aqui a Docker Image final é gerada
-FROM node:18-alpine
-
-WORKDIR /app
-
-COPY --from=build /app/node_modules ./node_modules
-
-COPY --from=build /app/dist ./dist
+EXPOSE 3000
 
 CMD npm run start
