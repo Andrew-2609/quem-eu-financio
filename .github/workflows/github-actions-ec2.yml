@@ -25,4 +25,8 @@ jobs:
         REMOTE_USER: ${{secrets.USERNAME}}
         TARGET: ${{secrets.TARGET_DIR}}
         EXCLUDE: "**.env"
+
+    - name: Restart the application
+      run: docker-compose down
+      run: docker-compose up
   
