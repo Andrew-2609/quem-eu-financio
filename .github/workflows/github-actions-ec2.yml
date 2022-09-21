@@ -3,7 +3,7 @@ name: Push-to-EC2
 on:
   push:
     branches:
-      - feat/configure-github-actions
+      - main
 
 jobs:
   deploy:
