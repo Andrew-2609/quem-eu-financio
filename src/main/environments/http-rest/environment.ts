@@ -25,7 +25,7 @@ export class HttpRestEnvironment {
     this.handler.use(URL, this.getRouter())
     this.handler.use('*', endpointNotFound())
     this.handler.listen(this.port, () => {
-      console.log(`\n\n\n Listening at ${this.port} \n\n\n`)
+      console.log(`\n\n\n Testing at ${this.port} \n\n\n`)
     })
   }
 
