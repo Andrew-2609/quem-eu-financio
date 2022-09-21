@@ -3,7 +3,7 @@ name: Push-to-EC2
 on:
   push:
     branches:
-      - dev
+      - feat/configure-github-actions
 
 jobs:
   deploy:
@@ -18,9 +18,9 @@ jobs:
       uses: easingthemes/ssh-deploy@main
 
       env:
-        SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+        SSH_PRIVATE_KEY: ${{secrets.EC2_SSH_KEY}}
         SOURCE: "./"
-        REMOTE_HOST: ${ { secrets.HOST_DNS }}
-        REMOTE_USER: ${ { secrets.USERNAME }}
-        TARGET: ${ { secrets.TARGET_DIR }}
+        REMOTE_HOST: ${{secrets.HOST_DNS}}
+        REMOTE_USER: ${{secrets.USERNAME}}
+        TARGET: ${{secrets.TARGET_DIR}}
   
