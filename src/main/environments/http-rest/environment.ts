@@ -23,7 +23,7 @@ export class HttpRestEnvironment {
     this.handler.use(compression())
     this.handler.use(
       cors({
-        origin: 'http://quem-eu-financio.s3-website-sa-east-1.amazonaws.com/'
+        origin: 'http://quem-eu-financio.s3-website-sa-east-1.amazonaws.com'
       })
     )
     this.handler.disable('x-powered-by')
