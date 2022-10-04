@@ -1,6 +1,7 @@
 import compression from 'compression'
 import express, { Router } from 'express'
 import { endpointNotFound } from './factories/middlewares/endpoint-not-found'
+import cors from 'cors'
 import {
   registerDeputadoEstadualRoutes,
   registerDeputadoFederalRoutes,
@@ -20,6 +21,11 @@ export class HttpRestEnvironment {
   start(): void {
     this.handler.use(express.json())
     this.handler.use(compression())
+    this.handler.use(
+      cors({
+        origin: ['http://quem-eu-financio.s3-website-sa-east-1.amazonaws.com/']
+      })
+    )
     this.handler.disable('x-powered-by')
     const URL = `/quem-eu-financio/${this.version}`
     this.handler.use(URL, this.getRouter())
